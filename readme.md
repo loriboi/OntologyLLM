@@ -9,12 +9,12 @@ Nella repository sono presenti diversi files:
 - ZoraActionsOnto.owl ontologia dei movimenti
 - requirements.txt serve per installare le librerie necessarie
 
-Il primo step da fare è creare l'environment e installare le librerie 
- python -m venv env
- python env/Scripts
- activate
- cd ../..
- pip install -r requirements.txt
+Il primo step da fare è creare l'environment e installare le librerie   
+ python -m venv env  
+ python env/Scripts  
+ activate  
+ cd ../..  
+ pip install -r requirements.txt  
 
 Dopodichè si è pronti per lanciare il test.py  
  python test.py
