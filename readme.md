@@ -26,9 +26,19 @@ git clone https://github.com/loriboi/OntologyLLM.git
 ```bash
 cd OntologyLLM
 python -m venv env
+```
+- On Windows
+```bash
 cd env/Scripts
 activate
 cd ../..
+- On MacOS
+```bash
+cd env
+source bin/activate
+```
+**NB: if you use different OS you might need to use different commands to activate the environment**
+```bash
 pip install -r requirements.txt
 ```
 3. Edit config.py to insert the apiKey="your apikey" (recommended gpt-3.5-turbo-16k)
