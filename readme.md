@@ -32,6 +32,7 @@ python -m venv env
 cd env/Scripts
 activate
 cd ../..
+```
 - On MacOS
 ```bash
 cd env
