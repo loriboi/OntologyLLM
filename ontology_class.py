@@ -61,10 +61,10 @@ class ontology:
         OPTIONAL { ?subClass rdfs:comment ?comment }
         }
         """
-        # Esegui la query SPARQL
+        
         results = self.g.query(query)
 
-    # Processa i risultati
+    
         subclasses = []
         for row in results:
             subclass_uri = str(row.subClass)
@@ -74,7 +74,7 @@ class ontology:
             }
             subclasses.append(subclass_info)
 
-    # Stampa i risultati
+    
         list_classes = []
         for subclass in subclasses:
             list_classes.append(subclass['name'])
@@ -82,7 +82,7 @@ class ontology:
         return list_classes
 
     def query_action_objects(self,action_type):   
-    # Costruisci la query SPARQL dinamicamente
+   
         query_template = """
         PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
         PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
@@ -95,10 +95,10 @@ class ontology:
         }
         """ % action_type
 
-    # Esegui la query SPARQL
+    
         results = self.g.query(query_template)
 
-    # Crea un dizionario per i risultati
+   
         action_codes = {}
         for row in results:
             object_name = str(row.object).split("#")[-1]
@@ -127,10 +127,10 @@ class ontology:
     }
     """
 
-    # Esegui la query SPARQL
+ 
         results = self.g.query(query)
 
-    # Processa i risultati
+
         subclasses = []
         for row in results:
             subclass_uri = str(row.subClass)
@@ -148,14 +148,14 @@ class ontology:
         return list_classes
     
     def individualElements(self):
-        # Query SPARQL per ottenere gli URI degli elementi
+      
         query = """
         SELECT ?element
         WHERE {
             ?element rdf:type owl:NamedIndividual .
         }
         """
-    # Esegui la query SPARQL
+    
         elements_to_find = []
         for row in self.g.query(query):
             elements_to_find.append(str(row.element))
@@ -166,26 +166,25 @@ class ontology:
             if code:
                 elements_with_codes.append((element.split("#")[-1], code))
 
-        # Separa gli elementi in base alle prime quattro lettere
+       
         grouped_elements = defaultdict(list)
         for element, code in elements_with_codes:
             key = element[:3]
             grouped_elements[key].append((element, code))
 
-        # Trova la parte in comune e rinomina i gruppi
         renamed_groups = {}
         for key, items in grouped_elements.items():
             common_prefix = longest_common_prefix([item[0] for item in items])
             renamed_groups[common_prefix] = items
 
-        # Stampa gli elementi raggruppati con i nuovi nomi dei gruppi
+       
         for group_name, items in renamed_groups.items():
             print(f'Gruppo: {group_name}')
             for element, code in items:
                 print(f'  Elemento: {element}, Codice: {code}')
-    #aggiunge all'oggetto tutti i gruppi, i nomi dei gruppi, le liste di movimenti per ogni gruppo
+   
     def allElements(self):
-        # Query SPARQL per ottenere gli URI degli elementi e il loro tipo
+
         query = """
         PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
         PREFIX owl: <http://www.w3.org/2002/07/owl#>
@@ -208,7 +207,7 @@ class ontology:
             if code:
                 elements_with_codes.append((element_uri.split("#")[-1], element_type, code))
 
-        # Separa gli elementi in base al tipo
+     
         grouped_elements = defaultdict(list)
         for element, element_type, code in elements_with_codes:
             grouped_elements[element_type].append((element, code))
@@ -233,8 +232,7 @@ class ontology:
         return results
         
     def baseActionTitles(self):
-        #get baseAction and set in self
-        # Definisci la query SPARQL per estrarre gli URI all'interno dell'elemento owl:unionOf
+  
         query = """
         PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
         PREFIX owl: <http://www.w3.org/2002/07/owl#>
@@ -248,14 +246,14 @@ class ontology:
         }
         """
 
-        # Esegui la query SPARQL
+      
         results = self.g.query(query)
 
-        # Estrai l'ultima parte degli URI dai risultati
+
         last_parts = [str(row.member).split('#')[-1] for row in results]
 
         baseActions = []
-        # Stampa l'ultima parte degli URI
+    
         for part in last_parts:
             baseActions.append(part)
 
@@ -263,8 +261,7 @@ class ontology:
         return
 
     def simpleActionTitles(self):
-        #get simpleAction and set in self
-        # Definisci la query SPARQL per estrarre gli URI all'interno dell'elemento owl:unionOf per SimpleAction
+     
         query = """
         PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
         PREFIX owl: <http://www.w3.org/2002/07/owl#>
@@ -278,14 +275,14 @@ class ontology:
         }
         """
 
-        # Esegui la query SPARQL
+ 
         results = self.g.query(query)
 
-        # Estrai l'ultima parte degli URI dai risultati
+ 
         last_parts = [str(row.member).split('#')[-1] for row in results]
 
         allactions = []
-        # Stampa l'ultima parte degli URI
+      
         for part in last_parts:
             allactions.append(part)
 
@@ -295,7 +292,7 @@ class ontology:
         return
 
     def compundActionTitles(self):
-        # Definisci la query SPARQL per ottenere gli elementi all'interno dell'elemento owl:unionOf per CompoundAction
+  
         query = """
         PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
         PREFIX owl: <http://www.w3.org/2002/07/owl#>
@@ -309,10 +306,10 @@ class ontology:
         }
         """
 
-        # Esegui la query SPARQL
+     
         results = self.g.query(query)
 
-        # Estrai l'ultima parte degli URI dai risultati
+       
         last_parts = [str(row.member).split('#')[-1] for row in results]
         
         actions = []
@@ -327,7 +324,7 @@ class ontology:
     def kindofactions(self):
         filtered_data = {key: self.groups[key] for key in self.baseActionsList}
         self.baseActions = filtered_data
-        # Comprensione di dizionario per estrarre solo le chiavi specificate
+     
         filtered_data = {key: self.groups[key] for key in self.compundActionsList}
         self.compundActions = filtered_data
         filtered_data = {key: self.groups[key] for key in self.simpleActionsList}
@@ -364,14 +361,14 @@ class ontology:
 
             for row in results:
                 involves_fragment = str(row.involves).split('#')[-1]
-                action_fragment = str(row.action).split('#')[-1].replace("Action", "")  # Rimuoviamo "Action"
+                action_fragment = str(row.action).split('#')[-1].replace("Action", "")  
         
                 if involves_fragment not in grouped_results:
-                    grouped_results[involves_fragment] = set()  # Usiamo un set per evitare duplicati
+                    grouped_results[involves_fragment] = set()  
         
                 grouped_results[involves_fragment].add(action_fragment)
 
-        # Rimuovi "Action" dal dizionario
+
         for key, value in grouped_results.items():
             grouped_results[key] = list(value)
 
@@ -379,7 +376,7 @@ class ontology:
 
     def compundComponentsAction(self):
         compund_actions_involvesBoth = {}
-        # Itera sulla lista delle classi
+  
         for action_class in self.compundActionsList:
             query = """
             PREFIX owl: <http://www.w3.org/2002/07/owl#>
@@ -396,7 +393,7 @@ class ontology:
             
             results = self.g.query(query)
 
-            # Raggruppa i risultati
+        
             for row in results:
                 individual_fragment = str(row.individual).split('#')[-1]
                 involvesBoth_fragment = str(row.involvesBoth).split('#')[-1]
@@ -407,7 +404,7 @@ class ontology:
 
                 compund_actions_involvesBoth[individual_fragment].append(involvesBoth_fragment)
 
-        # Funzione per sostituire i valori specifici con combinati
+    
         def get_combined_involves(values):
             for (left, right), combined in body_part_map.items():
                 if left in values and right in values:
@@ -415,7 +412,7 @@ class ontology:
                     values.append(combined)
             return values
 
-        # Raggruppa per involvesBoth combinato
+        
         grouped_by_involvesBoth = {}
 
         for individual, involves_list in compund_actions_involvesBoth.items():
@@ -427,8 +424,7 @@ class ontology:
 
             grouped_by_involvesBoth[combined_involves_key].append(individual)
 
-        # Stampa i risultati raggruppati
-        # Rimuovi "Action" dal dizionario
+        
         for key, value in grouped_by_involvesBoth.items():
             grouped_by_involvesBoth[key] = list(value)
 
@@ -454,14 +450,14 @@ class ontology:
 
             for row in results:
                 involves_fragment = str(row.involves).split('#')[-1]
-                action_fragment = str(row.action).split('#')[-1].replace("Action", "")  # Rimuoviamo "Action"
+                action_fragment = str(row.action).split('#')[-1].replace("Action", "") 
         
                 if involves_fragment not in grouped_results:
-                    grouped_results[involves_fragment] = set()  # Usiamo un set per evitare duplicati
+                    grouped_results[involves_fragment] = set()  
         
                 grouped_results[involves_fragment].add(action_fragment)
 
-        # Rimuovi "Action" dal dizionario
+     
         for key, value in grouped_results.items():
             grouped_results[key] = list(value)
         
