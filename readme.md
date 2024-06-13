@@ -16,7 +16,7 @@ Il primo step da fare è creare l'environment e installare le librerie
  cd ../..
  pip install -r requirements.txt
 
-Dopodichè si è pronti per lanciare il test.py
+Dopodichè si è pronti per lanciare il test.py  
  python test.py
 
 A questo punto si può chiedere di classificare delle azioni
